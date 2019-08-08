@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.ProjectTeamMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.ProjectTeam" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="DECIMAL" />
+    <result column="USER_ID" property="userId" jdbcType="DECIMAL" />
+    <result column="ROLE_IN_PROJECT" property="roleInProject" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PROJECT_ID, USER_ID, ROLE_IN_PROJECT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_TEAM
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询开始 -->
+  <select id="selectAllByProject" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_TEAM
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectUserByProjectIdAndRole" resultMap="BaseResultMap" parameterType="com.supervision.project.model.ProjectTeam" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_TEAM
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and ROLE_IN_PROJECT = #{roleInProject,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByProjectIdAndUserId" resultMap="BaseResultMap" parameterType="com.supervision.project.model.ProjectTeam" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_TEAM
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and USER_ID = #{userId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectAllByUser" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_TEAM
+    where USER_ID = #{userId,jdbcType=DECIMAL}
+  </select>
+  <!-- 自定义查询结束 -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_PROJECT_TEAM
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.ProjectTeam" >
+    insert into JLXT.TB_JLXT_PROJECT_TEAM (ID, PROJECT_ID, USER_ID, 
+      ROLE_IN_PROJECT)
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=DECIMAL}, #{userId,jdbcType=DECIMAL}, 
+      #{roleInProject,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.ProjectTeam" >
+    insert into JLXT.TB_JLXT_PROJECT_TEAM
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="projectId != null" >
+        PROJECT_ID,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="roleInProject != null" >
+        ROLE_IN_PROJECT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="roleInProject != null" >
+        #{roleInProject,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.ProjectTeam" >
+    update JLXT.TB_JLXT_PROJECT_TEAM
+    <set >
+      <if test="projectId != null" >
+        PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="roleInProject != null" >
+        ROLE_IN_PROJECT = #{roleInProject,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.ProjectTeam" >
+    update JLXT.TB_JLXT_PROJECT_TEAM
+    set PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      USER_ID = #{userId,jdbcType=DECIMAL},
+      ROLE_IN_PROJECT = #{roleInProject,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

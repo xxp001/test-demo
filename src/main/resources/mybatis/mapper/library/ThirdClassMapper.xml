@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.library.mapper.ThirdClassMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.library.model.ThirdClass">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CLASS_NAME" jdbcType="VARCHAR" property="className" />
+    <result column="CLASS_DESC" jdbcType="VARCHAR" property="classDesc" />
+    <result column="KEYWORDS" jdbcType="VARCHAR" property="keywords" />
+    <result column="PARENT_CLASS" jdbcType="DECIMAL" property="parentClass" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CLASS_NAME, CLASS_DESC, KEYWORDS, PARENT_CLASS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_THIRD_CLASS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- -->
+  <select id="selectAll" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_THIRD_CLASS
+  </select>
+
+  <select id="selectAllByParent" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_THIRD_CLASS
+    where PARENT_CLASS = #{parentId,jdbcType=DECIMAL} order by ID
+  </select>
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_THIRD_CLASS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.library.model.ThirdClass">
+    insert into JLXT.TB_JLXT_THIRD_CLASS (ID, CLASS_NAME, CLASS_DESC, 
+      KEYWORDS, PARENT_CLASS)
+    values (#{id,jdbcType=DECIMAL}, #{className,jdbcType=VARCHAR}, #{classDesc,jdbcType=VARCHAR}, 
+      #{keywords,jdbcType=VARCHAR}, #{parentClass,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.library.model.ThirdClass">
+    insert into JLXT.TB_JLXT_THIRD_CLASS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="className != null">
+        CLASS_NAME,
+      </if>
+      <if test="classDesc != null">
+        CLASS_DESC,
+      </if>
+      <if test="keywords != null">
+        KEYWORDS,
+      </if>
+      <if test="parentClass != null">
+        PARENT_CLASS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classDesc != null">
+        #{classDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="keywords != null">
+        #{keywords,jdbcType=VARCHAR},
+      </if>
+      <if test="parentClass != null">
+        #{parentClass,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.library.model.ThirdClass">
+    update JLXT.TB_JLXT_THIRD_CLASS
+    <set>
+      <if test="className != null">
+        CLASS_NAME = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classDesc != null">
+        CLASS_DESC = #{classDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="keywords != null">
+        KEYWORDS = #{keywords,jdbcType=VARCHAR},
+      </if>
+      <if test="parentClass != null">
+        PARENT_CLASS = #{parentClass,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.library.model.ThirdClass">
+    update JLXT.TB_JLXT_THIRD_CLASS
+    set CLASS_NAME = #{className,jdbcType=VARCHAR},
+      CLASS_DESC = #{classDesc,jdbcType=VARCHAR},
+      KEYWORDS = #{keywords,jdbcType=VARCHAR},
+      PARENT_CLASS = #{parentClass,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

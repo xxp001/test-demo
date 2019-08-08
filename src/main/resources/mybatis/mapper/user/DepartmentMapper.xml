@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.user.mapper.DepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.user.model.Department" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="DEPARTMENT" property="department" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, DEPARTMENT
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DEPARTMENT
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_DEPARTMENT
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.user.model.Department" >
+    insert into JLXT.TB_JLXT_DEPARTMENT (ID, DEPARTMENT,TYPE)
+    values (#{id,jdbcType=DECIMAL}, #{department,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR} )
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.user.model.Department" >
+    insert into JLXT.TB_JLXT_DEPARTMENT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="department != null" >
+        DEPARTMENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="department != null" >
+        #{department,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.user.model.Department" >
+    update JLXT.TB_JLXT_DEPARTMENT
+    <set >
+      <if test="department != null" >
+        DEPARTMENT = #{department,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.user.model.Department" >
+    update JLXT.TB_JLXT_DEPARTMENT
+    set DEPARTMENT = #{department,jdbcType=VARCHAR},
+    TYPE = #{type,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <select id="findAllDepartment" parameterType="com.supervision.user.model.Department" resultMap="BaseResultMap">
+    select *
+    from JLXT.TB_JLXT_DEPARTMENT
+  </select>
+  <select id="getDepartmentIdByName" parameterType="com.supervision.user.model.Department" resultType="java.lang.String">
+    select ID
+    from JLXT.TB_JLXT_DEPARTMENT
+    where  DEPARTMENT = #{dept,jdbcType=VARCHAR}
+  </select>
+  <select id="isExistDept" parameterType="com.supervision.user.model.User" resultType="java.lang.Integer">
+    select count(1)
+    from JLXT.TB_JLXT_DEPARTMENT
+    where DEPARTMENT = #{department,jdbcType=VARCHAR}
+  </select>
+</mapper>

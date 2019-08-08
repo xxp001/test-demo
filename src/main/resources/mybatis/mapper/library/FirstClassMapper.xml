@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.library.mapper.FirstClassMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.library.model.FirstClass">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CLASS_NAME" jdbcType="VARCHAR" property="className" />
+    <result column="CLASS_DESC" jdbcType="VARCHAR" property="classDesc" />
+    <result column="KEYWORDS" jdbcType="VARCHAR" property="keywords" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CLASS_NAME, CLASS_DESC, KEYWORDS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_FIRST_CLASS
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询 -->
+  <select id="selectAll" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_FIRST_CLASS order by ID
+  </select>
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_FIRST_CLASS
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.library.model.FirstClass">
+    insert into JLXT.TB_JLXT_FIRST_CLASS (ID, CLASS_NAME, CLASS_DESC, 
+      KEYWORDS)
+    values (#{id,jdbcType=DECIMAL}, #{className,jdbcType=VARCHAR}, #{classDesc,jdbcType=VARCHAR}, 
+      #{keywords,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.library.model.FirstClass">
+    insert into JLXT.TB_JLXT_FIRST_CLASS
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="className != null">
+        CLASS_NAME,
+      </if>
+      <if test="classDesc != null">
+        CLASS_DESC,
+      </if>
+      <if test="keywords != null">
+        KEYWORDS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classDesc != null">
+        #{classDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="keywords != null">
+        #{keywords,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.library.model.FirstClass">
+    update JLXT.TB_JLXT_FIRST_CLASS
+    <set>
+      <if test="className != null">
+        CLASS_NAME = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="classDesc != null">
+        CLASS_DESC = #{classDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="keywords != null">
+        KEYWORDS = #{keywords,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.library.model.FirstClass">
+    update JLXT.TB_JLXT_FIRST_CLASS
+    set CLASS_NAME = #{className,jdbcType=VARCHAR},
+      CLASS_DESC = #{classDesc,jdbcType=VARCHAR},
+      KEYWORDS = #{keywords,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.user.mapper.DepartmentRoleMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.user.model.DepartmentRole">
+    <result column="DEPT_ID" jdbcType="DECIMAL" property="deptId" />
+    <result column="ROLE_ID" jdbcType="DECIMAL" property="roleId" />
+  </resultMap>
+  <insert id="insert" parameterType="com.supervision.user.model.DepartmentRole">
+    insert into JLXT.TB_JLXT_DEPARTMENT_ROLE (DEPT_ID, ROLE_ID)
+    values (#{deptId,jdbcType=DECIMAL}, #{roleId,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.user.model.DepartmentRole">
+    insert into JLXT.TB_JLXT_DEPARTMENT_ROLE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deptId != null">
+        DEPT_ID,
+      </if>
+      <if test="roleId != null">
+        ROLE_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deptId != null">
+        #{deptId,jdbcType=DECIMAL},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_DEPARTMENT_ROLE
+    where DEPT_ID = #{deptId,jdbcType=DECIMAL}
+  </delete>
+</mapper>

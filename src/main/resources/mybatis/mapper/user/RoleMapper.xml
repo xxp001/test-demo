@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.user.mapper.RoleMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.user.model.Role">
+    <result column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="ROLEDESC" jdbcType="VARCHAR" property="roledesc" />
+  </resultMap>
+  <insert id="insert" parameterType="com.supervision.user.model.Role">
+    insert into JLXT.TB_JLXT_ROLE (ID, ROLEDESC)
+    values (#{id,jdbcType=DECIMAL}, #{roledesc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.user.model.Role">
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT JLXT.ROLE_SEQ.CURRVAL AS ID FROM DUAL
+    </selectKey>
+    insert into JLXT.TB_JLXT_ROLE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="roledesc != null">
+        ROLEDESC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="roledesc != null">
+        #{roledesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="getRoleInfo" parameterType="com.supervision.user.model.Role" resultType="java.beans.Beans">
+    select ID, ROLEDESC
+    from JLXT.TB_JLXT_ROLE
+  </select>
+  <delete id="delRole" parameterType="java.lang.Integer">
+    delete from  JLXT.TB_JLXT_ROLE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <update id="modifyRole" parameterType="com.supervision.user.model.Role">
+    update JLXT.TB_JLXT_ROLE
+    <set >
+    <if test="roledesc != null" >
+      ROLEDESC = #{roledesc,jdbcType=VARCHAR}
+    </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="setRole" parameterType="com.supervision.user.model.Role">
+    update JLXT.TB_JLXT_USER
+    <set>
+      ROLE_ID = #{roleId,jdbcType=VARCHAR}
+    </set>
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+  <select id="selectRole" parameterType="com.supervision.user.model.Role" resultType="java.lang.Integer">
+    select count(1)
+    from JLXT.TB_JLXT_ROLE r, JLXT.TB_JLXT_USER u
+    where r.ID = u.ROLE_ID and u.ROLE_ID = #{roleId,jdbcType=VARCHAR}
+  </select>
+  <select id="getRoleIdByRoledesc" parameterType="com.supervision.user.model.Role" resultType="java.lang.String">
+    select ID
+    from JLXT.TB_JLXT_ROLE
+    where ROLEDESC = #{roledesc,jdbcType=VARCHAR}
+  </select>
+  <select id="getAllRole" parameterType="com.supervision.user.model.Role" resultMap="BaseResultMap">
+    select *
+    from JLXT.TB_JLXT_ROLE order by ID desc
+  </select>
+  <select id="selectRoleById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select *
+    from JLXT.TB_JLXT_ROLE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <select id="getRoleByDeptId" parameterType="int" resultMap="BaseResultMap">
+       select * from JLXT.TB_JLXT_ROLE c, JLXT.TB_JLXT_DEPARTMENT_ROLE t where c.ID=t.ROLE_ID and t.DEPT_ID=#{deptId}
+    </select>
+</mapper>

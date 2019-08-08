@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.user.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.supervision.user.model.User">
+        <id column="ID" property="id" jdbcType="DECIMAL"/>
+        <result column="ROLE_ID" property="roleId" jdbcType="DECIMAL"/>
+        <result column="DEPARTMENT_ID" property="departmentId" jdbcType="DECIMAL"/>
+        <result column="WORK_CODE" property="workCode" jdbcType="VARCHAR"/>
+        <result column="PASSWORD" property="password" jdbcType="VARCHAR"/>
+        <result column="MOBILE" property="mobile" jdbcType="VARCHAR"/>
+        <result column="USER_STATE" property="userState" jdbcType="DECIMAL"/>
+        <result column="USER_REALNAME" property="userRealname" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, ROLE_ID, DEPARTMENT_ID, WORK_CODE, PASSWORD, MOBILE, USER_STATE, USER_REALNAME
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from JLXT.TB_JLXT_USER
+        where ID = #{id,jdbcType=DECIMAL}
+    </select>
+    <select id="selectNotLogicDelete" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from JLXT.TB_JLXT_USER
+        where USER_STATE != 2
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_USER
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+    <insert id="insert" parameterType="com.supervision.user.model.User">
+    insert into JLXT.TB_JLXT_USER (ID, ROLE_ID, DEPARTMENT_ID,
+    WORK_CODE, PASSWORD, MOBILE,
+    USER_STATE, USER_REALNAME)
+    values (#{id,jdbcType=DECIMAL}, #{roleId,jdbcType=DECIMAL}, #{departmentId,jdbcType=DECIMAL},
+    #{workCode,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR},
+    #{userState,jdbcType=DECIMAL}, #{userRealname,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.supervision.user.model.User">
+        insert into JLXT.TB_JLXT_USER
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="roleId != null">
+                ROLE_ID,
+            </if>
+            <if test="departmentId != null">
+                DEPARTMENT_ID,
+            </if>
+            <if test="workCode != null">
+                WORK_CODE,
+            </if>
+            <if test="password != null">
+                PASSWORD,
+            </if>
+            <if test="mobile != null">
+                MOBILE,
+            </if>
+            <if test="userState != null">
+                USER_STATE,
+            </if>
+            <if test="userRealname != null">
+                USER_REALNAME,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=DECIMAL},
+            </if>
+            <if test="roleId != null">
+                #{roleId,jdbcType=DECIMAL},
+            </if>
+            <if test="departmentId != null">
+                #{departmentId,jdbcType=DECIMAL},
+            </if>
+            <if test="workCode != null">
+                #{workCode,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="userState != null">
+                #{userState,jdbcType=DECIMAL},
+            </if>
+            <if test="userRealname != null">
+                #{userRealname,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.supervision.user.model.User">
+        update JLXT.TB_JLXT_USER
+        <set>
+            <if test="roleId != null">
+                ROLE_ID = #{roleId,jdbcType=DECIMAL},
+            </if>
+            <if test="departmentId != null">
+                DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL},
+            </if>
+            <if test="workCode != null">
+                WORK_CODE = #{workCode,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                PASSWORD = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                MOBILE = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="userState != null">
+                USER_STATE = #{userState,jdbcType=DECIMAL},
+            </if>
+            <if test="userRealname != null">
+                USER_REALNAME = #{userRealname,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=DECIMAL}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set ROLE_ID = #{roleId,jdbcType=DECIMAL},
+    DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL},
+    WORK_CODE = #{workCode,jdbcType=VARCHAR},
+    PASSWORD = #{password,jdbcType=VARCHAR},
+    MOBILE = #{mobile,jdbcType=VARCHAR},
+    USER_STATE = #{userState,jdbcType=DECIMAL},
+    USER_REALNAME = #{userRealname,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+    <select id="findAll" parameterType="com.supervision.user.model.User" resultMap="BaseResultMap">
+    select
+        <include refid="Base_Column_List"/>
+    from JLXT.TB_JLXT_USER
+  </select>
+    <select id="countUser" parameterType="com.supervision.user.model.User" resultType="java.lang.Integer">
+    select count(*)
+    from JLXT.TB_JLXT_USER
+  </select>
+    <select id="selectUserByWorkcode" parameterType="com.supervision.user.model.User" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from JLXT.TB_JLXT_USER
+        where WORK_CODE = #{workCode,jdbcType=VARCHAR} and PASSWORD = #{password,jdbcType=VARCHAR}
+    </select>
+    <select id="countUserByWorkcode" parameterType="com.supervision.user.model.User" resultType="java.lang.Integer">
+    select count(1)
+    from JLXT.TB_JLXT_USER
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </select>
+    <update id="disableAccount" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set USER_STATE = '2'
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <update id="enableAccount" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set USER_STATE = '1'
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <update id="transferUser" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL}
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <select id="getOrganizationInfo" parameterType="java.lang.Integer" resultType="java.lang.String">
+    select r.ROLEDESC
+    from JLXT.TB_JLXT_USER u, JLXT.TB_JLXT_ROLE r
+    where r.ID = u.ROLE_ID and u.ROLE_ID = #{roleId,jdbcType=DECIMAL}
+    order by #{roleId}
+  </select>
+    <select id="getUserInfoByWorkcode" parameterType="com.supervision.user.model.User" resultMap="BaseResultMap">
+    select *
+    from JLXT.TB_JLXT_USER
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </select>
+    <select id="getDepartmentId" parameterType="com.supervision.user.model.User" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from JLXT.TB_JLXT_USER
+        <where>
+            <if test="workCode != null">
+                AND WORK_CODE LIKE '%${workCode}%'
+            </if>
+            <if test="userRealname != null">
+                AND USER_REALNAME LIKE '%${userRealname}%'
+            </if>
+        </where>
+    </select>
+    <select id="getUserInfoByRoleId" parameterType="com.supervision.user.model.User" resultMap="BaseResultMap">
+        select *
+        from JLXT.TB_JLXT_USER
+        where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+    </select>
+    <select id="selectByWorkCodeOnly" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select *
+        from JLXT.TB_JLXT_USER
+        where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+    </select>
+    <select id="selectDirectors" resultMap="BaseResultMap">
+        select *
+        from JLXT.TB_JLXT_USER
+        where ROLE_ID = 10
+    </select>
+    <select id="selectDelegates" resultMap="BaseResultMap">
+        select *
+        from JLXT.TB_JLXT_USER
+        where ROLE_ID = 5
+    </select>
+    <select id="selectEngineers" resultMap="BaseResultMap">
+        select *
+        from JLXT.TB_JLXT_USER
+        where ROLE_ID = 1
+    </select>
+    <update id="delUserOfRole" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set ROLE_ID = 0
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <update id="modifyPwd" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set PASSWORD = #{password,jdbcType=VARCHAR}
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <select id="getUserByDeptId" resultMap="BaseResultMap">
+        select *
+        from JLXT.TB_JLXT_USER
+        where DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL}
+    </select>
+    <select id="countUserByDeptId" parameterType="com.supervision.user.model.User" resultType="java.lang.Integer">
+    select count(*)
+    from JLXT.TB_JLXT_USER
+    where DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL}
+  </select>
+    <update id="modifyDeptOfUserInfo" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set DEPARTMENT_ID = #{departmentId,jdbcType=DECIMAL},
+    MOBILE = #{mobile,jdbcType=VARCHAR},
+    USER_REALNAME = #{userRealname,jdbcType=VARCHAR}
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <update id="modifyUserInfoCompany" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set MOBILE = #{mobile,jdbcType=VARCHAR},
+    USER_REALNAME = #{userRealname,jdbcType=VARCHAR}
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <update id="updateUserState" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set USER_STATE = '3'
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <update id="updateUserLoginOutState" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set USER_STATE = '4'
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+    <update id="updateUserPhone" parameterType="com.supervision.user.model.User">
+    update JLXT.TB_JLXT_USER
+    set MOBILE = #{mobile,jdbcType=VARCHAR}
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

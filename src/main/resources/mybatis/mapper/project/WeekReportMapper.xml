@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.WeekReportMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.WeekReport" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="DECIMAL" />
+    <result column="UPLOAD_FROM" property="uploadFrom" jdbcType="DECIMAL" />
+    <result column="UPLOAD_TIME" property="uploadTime" jdbcType="TIMESTAMP" />
+    <result column="SUMMARY" property="summary" jdbcType="VARCHAR" />
+    <result column="WEEK_DETAIL" property="weekDetail" jdbcType="VARCHAR" />
+    <result column="ASK_QUESTION" property="askQuestion" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PROJECT_ID, UPLOAD_FROM, UPLOAD_TIME, SUMMARY, WEEK_DETAIL, ASK_QUESTION
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_WEEKREPORT
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询开始 -->
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_WEEKREPORT
+  </select>
+
+  <select id="selectAllByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_WEEKREPORT
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectAllByUser" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_WEEKREPORT
+    where UPLOAD_FROM = #{userId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectAllByDate" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_WEEKREPORT
+    where UPLOAD_TIME &gt;= #{start,jdbcType=TIMESTAMP} and UPLOAD_TIME &lt;= #{end,jdbcType=TIMESTAMP}
+  </select>
+
+  <select id="selectByDateByProject" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_WEEKREPORT
+    where UPLOAD_TIME &gt;= #{start,jdbcType=TIMESTAMP} and UPLOAD_TIME &lt;= #{end,jdbcType=TIMESTAMP} and PROJECT_ID = #{projectId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectAllByUserByDate" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_WEEKREPORT
+    where UPLOAD_TIME &gt;= #{start,jdbcType=TIMESTAMP} and UPLOAD_TIME &lt;= #{end,jdbcType=TIMESTAMP} and UPLOAD_FROM = #{userId,jdbcType=DECIMAL}
+  </select>
+  <!-- 自定义查询结束 -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_WEEKREPORT
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.WeekReport" >
+    insert into JLXT.TB_JLXT_WEEKREPORT (ID, PROJECT_ID, UPLOAD_FROM, 
+      UPLOAD_TIME, SUMMARY, WEEK_DETAIL, ASK_QUESTION
+      )
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=DECIMAL}, #{uploadFrom,jdbcType=DECIMAL}, 
+      #{uploadTime,jdbcType=TIMESTAMP}, #{summary,jdbcType=VARCHAR}, #{weekDetail,jdbcType=VARCHAR}, #{askQuestion,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.WeekReport" >
+    insert into JLXT.TB_JLXT_WEEKREPORT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="projectId != null" >
+        PROJECT_ID,
+      </if>
+      <if test="uploadFrom != null" >
+        UPLOAD_FROM,
+      </if>
+      <if test="uploadTime != null" >
+        UPLOAD_TIME,
+      </if>
+      <if test="summary != null" >
+        SUMMARY,
+      </if>
+      <if test="weekDetail != null" >
+        WEEK_DETAIL,
+      </if>
+      <if test="askQuestion != null" >
+        ASK_QUESTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadFrom != null" >
+        #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadTime != null" >
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="summary != null" >
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="weekDetail != null" >
+        #{weekDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="askQuestion != null" >
+        #{askQuestion,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.WeekReport" >
+    update JLXT.TB_JLXT_WEEKREPORT
+    <set >
+      <if test="projectId != null" >
+        PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadFrom != null" >
+        UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadTime != null" >
+        UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="summary != null" >
+        SUMMARY = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="weekDetail != null" >
+        WEEK_DETAIL = #{weekDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="askQuestion != null" >
+        ASK_QUESTION = #{askQuestion,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.WeekReport" >
+    update JLXT.TB_JLXT_WEEKREPORT
+    set PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      SUMMARY = #{summary,jdbcType=VARCHAR},
+      WEEK_DETAIL = #{weekDetail,jdbcType=VARCHAR},
+    ASK_QUESTION = #{askQuestion,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

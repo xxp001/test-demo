@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.document.mapper.DocumentMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.document.model.Document">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="PROJECT_ID" jdbcType="DECIMAL" property="projectId" />
+    <result column="MOMENT_ID" jdbcType="DECIMAL" property="momentId" />
+    <result column="DOC_NAME" jdbcType="VARCHAR" property="docName" />
+    <result column="FILE_CODE" jdbcType="VARCHAR" property="fileCode" />
+    <result column="DOC_TYPE" jdbcType="VARCHAR" property="docType" />
+    <result column="DOC_LOCATION" jdbcType="VARCHAR" property="docLocation" />
+    <result column="UPLOAD_TIME" jdbcType="TIMESTAMP" property="uploadTime" />
+    <result column="UPLOAD_FROM" jdbcType="DECIMAL" property="uploadFrom" />
+    <result column="DOC_STATE" jdbcType="DECIMAL" property="docState" />
+    <result column="WORK_CODE" property="workCode" jdbcType="VARCHAR" />
+    <result column="UPLOADER_NAME" property="uploaderName" jdbcType="VARCHAR" />
+    <result column="IS_TEMPLATE" jdbcType="DECIMAL" property="isTemplate" />
+    <result column="WHOLE_NAME" jdbcType="VARCHAR" property="wholeName" />
+    <result column="SUFFIX" jdbcType="VARCHAR" property="suffix" />
+    <result column="COUNT" jdbcType="DECIMAL" property="count" />
+    <result column="ORDER_MOMENT" jdbcType="DECIMAL" property="orderMoment" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, PROJECT_ID, MOMENT_ID, DOC_NAME, FILE_CODE, DOC_TYPE, DOC_LOCATION, UPLOAD_TIME, 
+    UPLOAD_FROM, DOC_STATE, WORK_CODE, UPLOADER_NAME, IS_TEMPLATE, WHOLE_NAME, SUFFIX, COUNT, ORDER_MOMENT
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DOC
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询 -->
+
+  <select id="selectAllByProject" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DOC
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and IS_TEMPLATE = 0 order by ORDER_MOMENT
+  </select>
+
+  <select id="selectAllByMoment" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DOC
+    where MOMENT_ID = #{momentId,jdbcType=DECIMAL} and IS_TEMPLATE = 0 order by COUNT
+  </select>
+
+  <select id="selectAllByMomentIsTemplate" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DOC
+    where MOMENT_ID = #{momentId,jdbcType=DECIMAL} and IS_TEMPLATE = 1 order by ORDER_MOMENT
+  </select>
+
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_DOC
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.document.model.Document">
+    insert into JLXT.TB_JLXT_DOC (ID, PROJECT_ID, MOMENT_ID, 
+      DOC_NAME, FILE_CODE, DOC_TYPE, 
+      DOC_LOCATION, UPLOAD_TIME, UPLOAD_FROM, 
+      DOC_STATE, WORK_CODE, UPLOADER_NAME, IS_TEMPLATE, WHOLE_NAME, SUFFIX, COUNT, ORDER_MOMENT)
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=DECIMAL}, #{momentId,jdbcType=DECIMAL},
+      #{docName,jdbcType=VARCHAR}, #{fileCode,jdbcType=VARCHAR}, #{docType,jdbcType=VARCHAR}, 
+      #{docLocation,jdbcType=VARCHAR}, #{uploadTime,jdbcType=TIMESTAMP}, #{uploadFrom,jdbcType=DECIMAL},
+      #{docState,jdbcType=DECIMAL}, #{workCode,jdbcType=VARCHAR}, #{uploaderName,jdbcType=VARCHAR},
+      #{isTemplate,jdbcType=DECIMAL}, #{wholeName,jdbcType=VARCHAR}, #{suffix,jdbcType=VARCHAR},
+      #{count,jdbcType=DECIMAL}, #{orderMoment,jdbcType=DECIMAL},)
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.document.model.Document">
+    insert into JLXT.TB_JLXT_DOC
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="projectId != null">
+        PROJECT_ID,
+      </if>
+      <if test="momentId != null">
+        MOMENT_ID,
+      </if>
+      <if test="docName != null">
+        DOC_NAME,
+      </if>
+      <if test="fileCode != null">
+        FILE_CODE,
+      </if>
+      <if test="docType != null">
+        DOC_TYPE,
+      </if>
+      <if test="docLocation != null">
+        DOC_LOCATION,
+      </if>
+      <if test="uploadTime != null">
+        UPLOAD_TIME,
+      </if>
+      <if test="uploadFrom != null">
+        UPLOAD_FROM,
+      </if>
+      <if test="docState != null">
+        DOC_STATE,
+      </if>
+      <if test="workCode != null" >
+        WORK_CODE,
+      </if>
+      <if test="uploaderName != null" >
+        UPLOADER_NAME,
+      </if>
+      <if test="isTemplate != null" >
+        IS_TEMPLATE,
+      </if>
+      <if test="wholeName != null" >
+        WHOLE_NAME,
+      </if>
+      <if test="suffix != null" >
+        SUFFIX,
+      </if>
+      <if test="count != null" >
+        COUNT,
+      </if>
+      <if test="orderMoment != null" >
+        ORDER_MOMENT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null">
+        #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentId != null">
+        #{momentId,jdbcType=DECIMAL},
+      </if>
+      <if test="docName != null">
+        #{docName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCode != null">
+        #{fileCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docType != null">
+        #{docType,jdbcType=VARCHAR},
+      </if>
+      <if test="docLocation != null">
+        #{docLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null">
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uploadFrom != null">
+        #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="docState != null">
+        #{docState,jdbcType=DECIMAL},
+      </if>
+      <if test="workCode != null" >
+        #{workCode,jdbcType=VARCHAR},
+      </if>
+      <if test="uploaderName != null" >
+        #{uploaderName,jdbcType=VARCHAR},
+      </if>
+      <if test="isTemplate != null" >
+        #{isTemplate,jdbcType=VARCHAR},
+      </if>
+      <if test="wholeName != null" >
+        #{wholeName,jdbcType=VARCHAR},
+      </if>
+      <if test="suffix != null" >
+        #{suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null" >
+        #{count,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMoment != null" >
+        #{orderMoment,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.document.model.Document">
+    update JLXT.TB_JLXT_DOC
+    <set>
+      <if test="projectId != null">
+        PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentId != null">
+        MOMENT_ID = #{momentId,jdbcType=DECIMAL},
+      </if>
+      <if test="docName != null">
+        DOC_NAME = #{docName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileCode != null">
+        FILE_CODE = #{fileCode,jdbcType=VARCHAR},
+      </if>
+      <if test="docType != null">
+        DOC_TYPE = #{docType,jdbcType=VARCHAR},
+      </if>
+      <if test="docLocation != null">
+        DOC_LOCATION = #{docLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null">
+        UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uploadFrom != null">
+        UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="docState != null">
+        DOC_STATE = #{docState,jdbcType=DECIMAL},
+      </if>
+      <if test="workCode != null" >
+        WORK_CODE = #{workCode,jdbcType=VARCHAR},
+      </if>
+      <if test="uploaderName != null" >
+        UPLOADER_NAME = #{uploaderName,jdbcType=VARCHAR},
+      </if>
+      <if test="isTemplate != null" >
+        IS_TEMPLATE = #{isTemplate,jdbcType=VARCHAR},
+      </if>
+      <if test="wholeName != null" >
+        WHOLE_NAME = #{wholeName,jdbcType=VARCHAR},
+      </if>
+      <if test="suffix != null" >
+        SUFFIX = #{suffix,jdbcType=VARCHAR},
+      </if>
+      <if test="count != null" >
+        COUNT = #{count,jdbcType=VARCHAR},
+      </if>
+      <if test="orderMoment != null" >
+        ORDER_MOMENT = #{orderMoment,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.document.model.Document">
+    update JLXT.TB_JLXT_DOC
+    set PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      MOMENT_ID = #{momentId,jdbcType=DECIMAL},
+      DOC_NAME = #{docName,jdbcType=VARCHAR},
+      FILE_CODE = #{fileCode,jdbcType=VARCHAR},
+      DOC_TYPE = #{docType,jdbcType=VARCHAR},
+      DOC_LOCATION = #{docLocation,jdbcType=VARCHAR},
+      UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      DOC_STATE = #{docState,jdbcType=DECIMAL},
+      WORK_CODE = #{workCode,jdbcType=VARCHAR},
+      UPLOADER_NAME = #{uploaderName,jdbcType=VARCHAR},
+      IS_TEMPLATE = #{isTemplate,jdbcType=VARCHAR},
+      WHOLE_NAME = #{wholeName,jdbcType=VARCHAR},
+      SUFFIX = #{suffix,jdbcType=VARCHAR},
+      COUNT = #{count,jdbcType=VARCHAR},
+      ORDER_MOMENT = #{orderMoment,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

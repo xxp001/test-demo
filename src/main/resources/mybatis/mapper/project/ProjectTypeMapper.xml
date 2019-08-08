@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.ProjectTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.ProjectType" >
+    <id column="TYPE_ID" property="typeId" jdbcType="DECIMAL" />
+    <result column="TYPE_NAME" property="typeName" jdbcType="VARCHAR" />
+    <result column="TYPE_DESC" property="typeDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TYPE_ID, TYPE_NAME, TYPE_DESC
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_TYPE
+    where TYPE_ID = #{typeId,jdbcType=DECIMAL}
+  </select>
+
+  <!-- -->
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_TYPE
+  </select>
+
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_PROJECT_TYPE
+    where TYPE_ID = #{typeId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.ProjectType" >
+    insert into JLXT.TB_JLXT_PROJECT_TYPE (TYPE_ID, TYPE_NAME, TYPE_DESC
+      )
+    values (#{typeId,jdbcType=DECIMAL}, #{typeName,jdbcType=VARCHAR}, #{typeDesc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.ProjectType" >
+    insert into JLXT.TB_JLXT_PROJECT_TYPE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        TYPE_ID,
+      </if>
+      <if test="typeName != null" >
+        TYPE_NAME,
+      </if>
+      <if test="typeDesc != null" >
+        TYPE_DESC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="typeId != null" >
+        #{typeId,jdbcType=DECIMAL},
+      </if>
+      <if test="typeName != null" >
+        #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDesc != null" >
+        #{typeDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.ProjectType" >
+    update JLXT.TB_JLXT_PROJECT_TYPE
+    <set >
+      <if test="typeName != null" >
+        TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      </if>
+      <if test="typeDesc != null" >
+        TYPE_DESC = #{typeDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TYPE_ID = #{typeId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.ProjectType" >
+    update JLXT.TB_JLXT_PROJECT_TYPE
+    set TYPE_NAME = #{typeName,jdbcType=VARCHAR},
+      TYPE_DESC = #{typeDesc,jdbcType=VARCHAR}
+    where TYPE_ID = #{typeId,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.MomentMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.Moment" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="DECIMAL" />
+    <result column="MOMENT_ORDER" property="momentOrder" jdbcType="DECIMAL" />
+    <result column="MOMENT_DESC" property="momentDesc" jdbcType="VARCHAR" />
+    <result column="STATE" property="state" jdbcType="DECIMAL" />
+    <result column="FILE_NUMBER" property="fileNumber" jdbcType="DECIMAL" />
+    <result column="UPLOADED_FILE_NUMBER" property="uploadedFileNumber" jdbcType="DECIMAL" />
+    <result column="EXPECT_FINISH_TIME" jdbcType="TIMESTAMP" property="expectFinishTime" />
+    <result column="FINISH_TIME" jdbcType="TIMESTAMP" property="finishTime" />
+    <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="MOMENT_NAME" jdbcType="VARCHAR" property="momentName" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PROJECT_ID, MOMENT_ORDER, MOMENT_DESC, STATE, FILE_NUMBER, UPLOADED_FILE_NUMBER, EXPECT_FINISH_TIME, FINISH_TIME, START_TIME, MOMENT_NAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_MOMENT
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询 -->
+  <select id="selectAllByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_MOMENT
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} order by MOMENT_ORDER
+  </select>
+
+  <select id="selectByProjectIdAndState" resultMap="BaseResultMap" parameterType="com.supervision.project.model.Moment" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_MOMENT
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and STATE = #{state,jdbcType=DECIMAL} order by MOMENT_ORDER
+  </select>
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_PROJECT_MOMENT
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.Moment" >
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT JLXT.PROJECT_MOMENT_SEQ.CURRVAL AS ID FROM DUAL
+    </selectKey>
+    insert into JLXT.TB_JLXT_PROJECT_MOMENT (ID, PROJECT_ID, MOMENT_ORDER, 
+      MOMENT_DESC, STATE, FILE_NUMBER, 
+      UPLOADED_FILE_NUMBER, EXPECT_FINISH_TIME, FINISH_TIME, START_TIME, MOMENT_NAME)
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=DECIMAL}, #{momentOrder,jdbcType=DECIMAL}, 
+      #{momentDesc,jdbcType=VARCHAR}, #{state,jdbcType=DECIMAL}, #{fileNumber,jdbcType=DECIMAL},
+      #{uploadedFileNumber,jdbcType=DECIMAL}, #{expectFinishTime,jdbcType=TIMESTAMP}, #{finishTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, #{momentName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.Moment" >
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT JLXT.PROJECT_MOMENT_SEQ.CURRVAL AS ID FROM DUAL
+    </selectKey>
+    insert into JLXT.TB_JLXT_PROJECT_MOMENT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="projectId != null" >
+        PROJECT_ID,
+      </if>
+      <if test="momentOrder != null" >
+        MOMENT_ORDER,
+      </if>
+      <if test="momentDesc != null" >
+        MOMENT_DESC,
+      </if>
+      <if test="state != null" >
+        STATE,
+      </if>
+      <if test="fileNumber != null" >
+        FILE_NUMBER,
+      </if>
+      <if test="uploadedFileNumber != null" >
+        UPLOADED_FILE_NUMBER,
+      </if>
+      <if test="expectFinishTime != null">
+        EXPECT_FINISH_TIME,
+      </if>
+      <if test="finishTime != null">
+        FINISH_TIME,
+      </if>
+      <if test="startTime != null">
+        START_TIME,
+      </if>
+      <if test="momentName != null">
+        MOMENT_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentOrder != null" >
+        #{momentOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="momentDesc != null" >
+        #{momentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=DECIMAL},
+      </if>
+      <if test="fileNumber != null" >
+        #{fileNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadedFileNumber != null" >
+        #{uploadedFileNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="expectFinishTime != null">
+        #{expectFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishTime != null">
+        #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="momentName != null">
+        #{momentName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.Moment" >
+    update JLXT.TB_JLXT_PROJECT_MOMENT
+    <set >
+      <if test="projectId != null" >
+        PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentOrder != null" >
+        MOMENT_ORDER = #{momentOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="momentDesc != null" >
+        MOMENT_DESC = #{momentDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        STATE = #{state,jdbcType=DECIMAL},
+      </if>
+      <if test="fileNumber != null" >
+        FILE_NUMBER = #{fileNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadedFileNumber != null" >
+        UPLOADED_FILE_NUMBER = #{uploadedFileNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="expectFinishTime != null">
+        EXPECT_FINISH_TIME = #{expectFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishTime != null">
+        FINISH_TIME = #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null">
+        START_TIME = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="momentName != null">
+        MOMENT_NAME = #{momentName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.Moment" >
+    update JLXT.TB_JLXT_PROJECT_MOMENT
+    set PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      MOMENT_ORDER = #{momentOrder,jdbcType=DECIMAL},
+      MOMENT_DESC = #{momentDesc,jdbcType=VARCHAR},
+      STATE = #{state,jdbcType=DECIMAL},
+      FILE_NUMBER = #{fileNumber,jdbcType=DECIMAL},
+      UPLOADED_FILE_NUMBER = #{uploadedFileNumber,jdbcType=DECIMAL},
+      EXPECT_FINISH_TIME = #{projectType,jdbcType=TIMESTAMP},
+      FINISH_TIME = #{projectType,jdbcType=TIMESTAMP},
+      START_TIME = #{projectType,jdbcType=TIMESTAMP},
+      MOMENT_NAME = #{momentName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

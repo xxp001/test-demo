@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.RoleCostMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.RoleCost" >
+    <id column="ROLE_ID" property="roleId" jdbcType="DECIMAL" />
+    <result column="ROLE_COST_HALF_DAY" property="roleCostHalfDay" jdbcType="DECIMAL" />
+    <result column="ROLE_COST_DESC" property="roleCostDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ROLE_ID, ROLE_COST_HALF_DAY, ROLE_COST_DESC
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_ROLE_COST
+    where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+  </select>
+
+  <!-- -->
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_ROLE_COST order by ROLE_ID desc
+  </select>
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_ROLE_COST
+    where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.RoleCost" >
+    insert into JLXT.TB_JLXT_ROLE_COST (ROLE_ID, ROLE_COST_HALF_DAY, ROLE_COST_DESC
+      )
+    values (#{roleId,jdbcType=DECIMAL}, #{roleCostHalfDay,jdbcType=DECIMAL}, #{roleCostDesc,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.RoleCost" >
+    insert into JLXT.TB_JLXT_ROLE_COST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        ROLE_ID,
+      </if>
+      <if test="roleCostHalfDay != null" >
+        ROLE_COST_HALF_DAY,
+      </if>
+      <if test="roleCostDesc != null" >
+        ROLE_COST_DESC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=DECIMAL},
+      </if>
+      <if test="roleCostHalfDay != null" >
+        #{roleCostHalfDay,jdbcType=DECIMAL},
+      </if>
+      <if test="roleCostDesc != null" >
+        #{roleCostDesc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.RoleCost" >
+    update JLXT.TB_JLXT_ROLE_COST
+    <set >
+      <if test="roleCostHalfDay != null" >
+        ROLE_COST_HALF_DAY = #{roleCostHalfDay,jdbcType=DECIMAL},
+      </if>
+      <if test="roleCostDesc != null" >
+        ROLE_COST_DESC = #{roleCostDesc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.RoleCost" >
+    update JLXT.TB_JLXT_ROLE_COST
+    set ROLE_COST_HALF_DAY = #{roleCostHalfDay,jdbcType=DECIMAL},
+      ROLE_COST_DESC = #{roleCostDesc,jdbcType=VARCHAR}
+    where ROLE_ID = #{roleId,jdbcType=DECIMAL}
+  </update>
+</mapper>

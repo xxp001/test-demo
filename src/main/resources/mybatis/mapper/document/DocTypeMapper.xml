@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.document.mapper.DocTypeMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.document.model.DocType" >
+    <id column="DOC_TYPE_ID" property="docTypeId" jdbcType="DECIMAL" />
+    <result column="DOC_TYPE_NAME" property="docTypeName" jdbcType="VARCHAR" />
+    <result column="DOC_TYPE_DESC" property="docTypeDesc" jdbcType="VARCHAR" />
+    <result column="DOC_TEMPLATE_LOCATION" property="docTemplateLocation" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    DOC_TYPE_ID, DOC_TYPE_NAME, DOC_TYPE_DESC, DOC_TEMPLATE_LOCATION
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DOC_TYPE
+    where DOC_TYPE_ID = #{docTypeId,jdbcType=DECIMAL}
+  </select>
+
+  <!-- -->
+
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DOC_TYPE order by DOC_TYPE_NAME
+  </select>
+
+  <select id="selectByTemplateName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DOC_TYPE
+    where DOC_TYPE_NAME = #{templateName,jdbcType=VARCHAR}
+  </select>
+
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_DOC_TYPE
+    where DOC_TYPE_ID = #{docTypeId,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.document.model.DocType" >
+    insert into JLXT.TB_JLXT_DOC_TYPE (DOC_TYPE_ID, DOC_TYPE_NAME, DOC_TYPE_DESC, DOC_TEMPLATE_LOCATION
+      )
+    values (#{docTypeId,jdbcType=DECIMAL}, #{docTypeName,jdbcType=VARCHAR}, #{docTypeDesc,jdbcType=VARCHAR}, #{docTemplateLocation,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.document.model.DocType" >
+    insert into JLXT.TB_JLXT_DOC_TYPE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="docTypeId != null" >
+        DOC_TYPE_ID,
+      </if>
+      <if test="docTypeName != null" >
+        DOC_TYPE_NAME,
+      </if>
+      <if test="docTypeDesc != null" >
+        DOC_TYPE_DESC,
+      </if>
+      <if test="docTemplateLocation != null" >
+        DOC_TEMPLATE_LOCATION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="docTypeId != null" >
+        #{docTypeId,jdbcType=DECIMAL},
+      </if>
+      <if test="docTypeName != null" >
+        #{docTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="docTypeDesc != null" >
+        #{docTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="docTemplateLocation != null" >
+        #{docTemplateLocation,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.document.model.DocType" >
+    update JLXT.TB_JLXT_DOC_TYPE
+    <set >
+      <if test="docTypeName != null" >
+        DOC_TYPE_NAME = #{docTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="docTypeDesc != null" >
+        DOC_TYPE_DESC = #{docTypeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="docTemplateLocation != null" >
+        DOC_TEMPLATE_LOCATION = #{docTemplateLocation,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DOC_TYPE_ID = #{docTypeId,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.document.model.DocType" >
+    update JLXT.TB_JLXT_DOC_TYPE
+    set DOC_TYPE_NAME = #{docTypeName,jdbcType=VARCHAR},
+      DOC_TYPE_DESC = #{docTypeDesc,jdbcType=VARCHAR},
+    DOC_TEMPLATE_LOCATION = #{docTemplateLocation,jdbcType=VARCHAR}
+    where DOC_TYPE_ID = #{docTypeId,jdbcType=DECIMAL}
+  </update>
+</mapper>

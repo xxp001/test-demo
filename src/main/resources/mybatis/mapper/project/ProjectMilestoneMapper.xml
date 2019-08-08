@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.project.mapper.ProjectMilestoneMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.ProjectMilestone">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="MILESTONE_DOC_NAME" jdbcType="VARCHAR" property="milestoneDocName" />
+    <result column="MILESTONE_DOC_TYPE" jdbcType="VARCHAR" property="milestoneDocType" />
+    <result column="MILESTONE_PROCESS" jdbcType="DECIMAL" property="milestoneProcess" />
+    <result column="MILESTONE_BONUS" jdbcType="DECIMAL" property="milestoneBonus" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, MILESTONE_DOC_NAME, MILESTONE_DOC_TYPE, MILESTONE_PROCESS, MILESTONE_BONUS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_MILESTONE
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- -->
+  <select id="selectByTemplateName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_MILESTONE
+    where MILESTONE_DOC_TYPE = #{template,jdbcType=VARCHAR}
+  </select>
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_MILESTONE
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.ProjectMilestone">
+    insert into JLXT.TB_JLXT_MILESTONE (ID, MILESTONE_DOC_NAME, MILESTONE_DOC_TYPE, 
+      MILESTONE_PROCESS, MILESTONE_BONUS)
+    values (#{id,jdbcType=DECIMAL}, #{milestoneDocName,jdbcType=VARCHAR}, #{milestoneDocType,jdbcType=VARCHAR}, 
+      #{milestoneProcess,jdbcType=DECIMAL}, #{milestoneBonus,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.ProjectMilestone">
+    insert into JLXT.TB_JLXT_MILESTONE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="milestoneDocName != null">
+        MILESTONE_DOC_NAME,
+      </if>
+      <if test="milestoneDocType != null">
+        MILESTONE_DOC_TYPE,
+      </if>
+      <if test="milestoneProcess != null">
+        MILESTONE_PROCESS,
+      </if>
+      <if test="milestoneBonus != null">
+        MILESTONE_BONUS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="milestoneDocName != null">
+        #{milestoneDocName,jdbcType=VARCHAR},
+      </if>
+      <if test="milestoneDocType != null">
+        #{milestoneDocType,jdbcType=VARCHAR},
+      </if>
+      <if test="milestoneProcess != null">
+        #{milestoneProcess,jdbcType=DECIMAL},
+      </if>
+      <if test="milestoneBonus != null">
+        #{milestoneBonus,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.ProjectMilestone">
+    update JLXT.TB_JLXT_MILESTONE
+    <set>
+      <if test="milestoneDocName != null">
+        MILESTONE_DOC_NAME = #{milestoneDocName,jdbcType=VARCHAR},
+      </if>
+      <if test="milestoneDocType != null">
+        MILESTONE_DOC_TYPE = #{milestoneDocType,jdbcType=VARCHAR},
+      </if>
+      <if test="milestoneProcess != null">
+        MILESTONE_PROCESS = #{milestoneProcess,jdbcType=DECIMAL},
+      </if>
+      <if test="milestoneBonus != null">
+        MILESTONE_BONUS = #{milestoneBonus,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.ProjectMilestone">
+    update JLXT.TB_JLXT_MILESTONE
+    set MILESTONE_DOC_NAME = #{milestoneDocName,jdbcType=VARCHAR},
+      MILESTONE_DOC_TYPE = #{milestoneDocType,jdbcType=VARCHAR},
+      MILESTONE_PROCESS = #{milestoneProcess,jdbcType=DECIMAL},
+      MILESTONE_BONUS = #{milestoneBonus,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

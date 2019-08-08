@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.ExtraCostMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.ExtraCost" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="DECIMAL" />
+    <result column="MOMENT_ID" property="momentId" jdbcType="DECIMAL" />
+    <result column="UPLOAD_FROM" property="uploadFrom" jdbcType="DECIMAL" />
+    <result column="UPLOAD_TIME" property="uploadTime" jdbcType="TIMESTAMP" />
+    <result column="AMOUNT" property="amount" jdbcType="DECIMAL" />
+    <result column="APPLY_STATE" property="applyState" jdbcType="DECIMAL" />
+    <result column="WORK_CODE" property="workCode" jdbcType="VARCHAR" />
+    <result column="UPLOADER_NAME" property="uploaderName" jdbcType="VARCHAR" />
+    <result column="COST_DESC" property="costDesc" jdbcType="VARCHAR" />
+    <result column="COST_REMARKS" property="costRemarks" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PROJECT_ID, MOMENT_ID, UPLOAD_FROM, UPLOAD_TIME, AMOUNT, APPLY_STATE, WORK_CODE, UPLOADER_NAME, COST_DESC, COST_REMARKS
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_EXTRACOST
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询开始 -->
+  <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_EXTRACOST
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByMoment" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_EXTRACOST
+    where MOMENT_ID = #{momentId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByProjectAndUser" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_EXTRACOST
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and UPLOAD_FROM = #{userId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByProjectAndUserByTime" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_EXTRACOST
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and UPLOAD_FROM = #{userId,jdbcType=DECIMAL} and UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP} order by COST_DESC asc
+  </select>
+
+  <select id="selectByMomentAndUserByTime" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_EXTRACOST
+    where MOMENT_ID = #{momentId,jdbcType=DECIMAL} and UPLOAD_FROM = #{userId,jdbcType=DECIMAL} and UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP} order by COST_DESC asc
+  </select>
+  <!-- 自定义查询开始 -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_EXTRACOST
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.ExtraCost" >
+    insert into JLXT.TB_JLXT_EXTRACOST (ID, PROJECT_ID, MOMENT_ID, 
+      UPLOAD_FROM, UPLOAD_TIME, AMOUNT, WORK_CODE, UPLOADER_NAME, COST_DESC
+      APPLY_STATE, WORK_CODE, UPLOADER_NAME, COST_DESC, COST_REMARKS)
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=DECIMAL}, #{momentId,jdbcType=DECIMAL}, 
+      #{uploadFrom,jdbcType=DECIMAL}, #{uploadTime,jdbcType=TIMESTAMP}, #{amount,jdbcType=DECIMAL}, 
+      #{applyState,jdbcType=DECIMAL}, #{workCode,jdbcType=VARCHAR}, #{uploaderName,jdbcType=VARCHAR}, #{costDesc,jdbcType=VARCHAR}, #{costRemarks,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.ExtraCost" >
+    insert into JLXT.TB_JLXT_EXTRACOST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="projectId != null" >
+        PROJECT_ID,
+      </if>
+      <if test="momentId != null" >
+        MOMENT_ID,
+      </if>
+      <if test="uploadFrom != null" >
+        UPLOAD_FROM,
+      </if>
+      <if test="uploadTime != null" >
+        UPLOAD_TIME,
+      </if>
+      <if test="amount != null" >
+        AMOUNT,
+      </if>
+      <if test="applyState != null" >
+        APPLY_STATE,
+      </if>
+      <if test="workCode != null" >
+        WORK_CODE,
+      </if>
+      <if test="uploaderName != null" >
+        UPLOADER_NAME,
+      </if>
+      <if test="costDesc != null" >
+        COST_DESC,
+      </if>
+      <if test="costRemarks != null" >
+        COST_REMARKS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentId != null" >
+        #{momentId,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadFrom != null" >
+        #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadTime != null" >
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="applyState != null" >
+        #{applyState,jdbcType=DECIMAL},
+      </if>
+      <if test="workCode != null" >
+        #{workCode,jdbcType=VARCHAR},
+      </if>
+      <if test="uploaderName != null" >
+        #{uploaderName,jdbcType=VARCHAR},
+      </if>
+      <if test="costDesc != null" >
+        #{costDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="costRemarks != null" >
+        #{costRemarks,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.ExtraCost" >
+    update JLXT.TB_JLXT_EXTRACOST
+    <set >
+      <if test="projectId != null" >
+        PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentId != null" >
+        MOMENT_ID = #{momentId,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadFrom != null" >
+        UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadTime != null" >
+        UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="amount != null" >
+        AMOUNT = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="applyState != null" >
+        APPLY_STATE = #{applyState,jdbcType=DECIMAL},
+      </if>
+      <if test="workCode != null" >
+        WORK_CODE = #{workCode,jdbcType=VARCHAR},
+      </if>
+      <if test="uploaderName != null" >
+        UPLOADER_NAME = #{uploaderName,jdbcType=VARCHAR},
+      </if>
+      <if test="costDesc != null" >
+        COST_DESC = #{costDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="costRemarks != null" >
+        COST_REMARKS = #{costRemarks,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.ExtraCost" >
+    update JLXT.TB_JLXT_EXTRACOST
+    set PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      MOMENT_ID = #{momentId,jdbcType=DECIMAL},
+      UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      AMOUNT = #{amount,jdbcType=DECIMAL},
+      APPLY_STATE = #{applyState,jdbcType=DECIMAL},
+      WORK_CODE = #{workCode,jdbcType=VARCHAR},
+      UPLOADER_NAME = #{uploaderName,jdbcType=VARCHAR},
+      COST_DESC = #{costDesc,jdbcType=VARCHAR},
+      COST_REMARKS = #{costRemarks,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

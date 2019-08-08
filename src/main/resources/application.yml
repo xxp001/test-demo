@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521:orcl
+    username: jlxt
+    password: q1w2e3r4
+    driver-class-name: oracle.jdbc.OracleDriver
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+server:
+  port: 8089
+
+mybatis:
+  mapper-locations:
+    - classpath:mybatis/mapper/document/*
+    - classpath:mybatis/mapper/project/*
+    - classpath:mybatis/mapper/user/*
+    - classpath:mybatis/mapper/library/*
+
+pagehelper:
+  auto-dialect: oracle
+
+custom-server-config:
+  fileLocationPath: C:\supervision

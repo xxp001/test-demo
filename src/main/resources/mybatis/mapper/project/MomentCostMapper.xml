@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.MomentCostMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.MomentCost" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="DECIMAL" />
+    <result column="MOMENT_ID" property="momentId" jdbcType="DECIMAL" />
+    <result column="EXPECT_COST" property="expectCost" jdbcType="DECIMAL" />
+    <result column="REAL_COST" property="realCost" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PROJECT_ID, MOMENT_ID, EXPECT_COST, REAL_COST
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_MOMENT_COST
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- -->
+  <select id="selectByProjectIdAndMomentId" resultMap="BaseResultMap" parameterType="com.supervision.project.model.MomentCost" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_MOMENT_COST
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and MOMENT_ID = #{momentId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT_MOMENT_COST
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL}
+  </select>
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_PROJECT_MOMENT_COST
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.MomentCost" >
+    insert into JLXT.TB_JLXT_PROJECT_MOMENT_COST (ID, PROJECT_ID, MOMENT_ID, 
+      EXPECT_COST, REAL_COST)
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=DECIMAL}, #{momentId,jdbcType=DECIMAL}, 
+      #{expectCost,jdbcType=DECIMAL}, #{realCost,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.MomentCost" >
+    insert into JLXT.TB_JLXT_PROJECT_MOMENT_COST
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="projectId != null" >
+        PROJECT_ID,
+      </if>
+      <if test="momentId != null" >
+        MOMENT_ID,
+      </if>
+      <if test="expectCost != null" >
+        EXPECT_COST,
+      </if>
+      <if test="realCost != null" >
+        REAL_COST,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentId != null" >
+        #{momentId,jdbcType=DECIMAL},
+      </if>
+      <if test="expectCost != null" >
+        #{expectCost,jdbcType=DECIMAL},
+      </if>
+      <if test="realCost != null" >
+        #{realCost,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.MomentCost" >
+    update JLXT.TB_JLXT_PROJECT_MOMENT_COST
+    <set >
+      <if test="projectId != null" >
+        PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentId != null" >
+        MOMENT_ID = #{momentId,jdbcType=DECIMAL},
+      </if>
+      <if test="expectCost != null" >
+        EXPECT_COST = #{expectCost,jdbcType=DECIMAL},
+      </if>
+      <if test="realCost != null" >
+        REAL_COST = #{realCost,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.MomentCost" >
+    update JLXT.TB_JLXT_PROJECT_MOMENT_COST
+    set PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      MOMENT_ID = #{momentId,jdbcType=DECIMAL},
+      EXPECT_COST = #{expectCost,jdbcType=DECIMAL},
+      REAL_COST = #{realCost,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

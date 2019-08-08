@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.library.mapper.BookMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.library.model.Book">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="BOOK_NAME" jdbcType="VARCHAR" property="bookName" />
+    <result column="BOOK_DESC" jdbcType="VARCHAR" property="bookDesc" />
+    <result column="BOOK_KEYWORDS" jdbcType="VARCHAR" property="bookKeywords" />
+    <result column="FIRST_CLASS" jdbcType="DECIMAL" property="firstClass" />
+    <result column="SECOND_CLASS" jdbcType="DECIMAL" property="secondClass" />
+    <result column="BOOK_LOCATION" jdbcType="VARCHAR" property="bookLocation" />
+    <result column="EDIT_TIME" jdbcType="TIMESTAMP" property="editTime" />
+    <result column="UPLOAD_FROM" jdbcType="DECIMAL" property="uploadFrom" />
+    <result column="THIRD_CLASS" jdbcType="DECIMAL" property="thirdClass" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, BOOK_NAME, BOOK_DESC, BOOK_KEYWORDS, FIRST_CLASS, SECOND_CLASS, THIRD_CLASS, BOOK_LOCATION, EDIT_TIME, UPLOAD_FROM
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_BOOK
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询 -->
+  <select id="selectAll" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_BOOK order by EDIT_TIME desc
+  </select>
+
+  <select id="selectAllByClass" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_BOOK
+    where THIRD_CLASS = #{classId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectAllByKeywords" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_BOOK
+    where BOOK_KEYWORDS like CONCAT(CONCAT('%',#{keywords}),'%') or BOOK_NAME like CONCAT(CONCAT('%',#{keywords}),'%') or BOOK_DESC like CONCAT(CONCAT('%',#{keywords}),'%')
+  </select>
+  <!-- -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_BOOK
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.library.model.Book">
+    insert into JLXT.TB_JLXT_BOOK (ID, BOOK_NAME, BOOK_DESC, 
+      BOOK_KEYWORDS, FIRST_CLASS, SECOND_CLASS, THIRD_CLASS,
+      BOOK_LOCATION, EDIT_TIME, UPLOAD_FROM)
+    values (#{id,jdbcType=DECIMAL}, #{bookName,jdbcType=VARCHAR}, #{bookDesc,jdbcType=VARCHAR}, 
+      #{bookKeywords,jdbcType=VARCHAR}, #{firstClass,jdbcType=DECIMAL}, #{secondClass,jdbcType=DECIMAL}, #{thirdClass,jdbcType=DECIMAL}
+      #{bookLocation,jdbcType=VARCHAR}, #{editTime,jdbcType=TIMESTAMP}, #{uploadFrom,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.library.model.Book">
+    insert into JLXT.TB_JLXT_BOOK
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="bookName != null">
+        BOOK_NAME,
+      </if>
+      <if test="bookDesc != null">
+        BOOK_DESC,
+      </if>
+      <if test="bookKeywords != null">
+        BOOK_KEYWORDS,
+      </if>
+      <if test="firstClass != null">
+        FIRST_CLASS,
+      </if>
+      <if test="secondClass != null">
+        SECOND_CLASS,
+      </if>
+      <if test="thirdClass != null">
+        THIRD_CLASS,
+      </if>
+      <if test="bookLocation != null">
+        BOOK_LOCATION,
+      </if>
+      <if test="editTime != null">
+        EDIT_TIME,
+      </if>
+      <if test="uploadFrom != null">
+        UPLOAD_FROM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="bookName != null">
+        #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookDesc != null">
+        #{bookDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="bookKeywords != null">
+        #{bookKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="firstClass != null">
+        #{firstClass,jdbcType=DECIMAL},
+      </if>
+      <if test="secondClass != null">
+        #{secondClass,jdbcType=DECIMAL},
+      </if>
+      <if test="thirdClass != null">
+        #{thirdClass,jdbcType=DECIMAL},
+      </if>
+      <if test="bookLocation != null">
+        #{bookLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="editTime != null">
+        #{editTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uploadFrom != null">
+        #{uploadFrom,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.library.model.Book">
+    update JLXT.TB_JLXT_BOOK
+    <set>
+      <if test="bookName != null">
+        BOOK_NAME = #{bookName,jdbcType=VARCHAR},
+      </if>
+      <if test="bookDesc != null">
+        BOOK_DESC = #{bookDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="bookKeywords != null">
+        BOOK_KEYWORDS = #{bookKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="firstClass != null">
+        FIRST_CLASS = #{firstClass,jdbcType=DECIMAL},
+      </if>
+      <if test="secondClass != null">
+        SECOND_CLASS = #{secondClass,jdbcType=DECIMAL},
+      </if>
+      <if test="thirdClass != null">
+        THIRD_CLASS = #{thirdClass,jdbcType=DECIMAL},
+      </if>
+      <if test="bookLocation != null">
+        BOOK_LOCATION = #{bookLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="editTime != null">
+        EDIT_TIME = #{editTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="uploadFrom != null">
+        UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.library.model.Book">
+    update JLXT.TB_JLXT_BOOK
+    set BOOK_NAME = #{bookName,jdbcType=VARCHAR},
+      BOOK_DESC = #{bookDesc,jdbcType=VARCHAR},
+      BOOK_KEYWORDS = #{bookKeywords,jdbcType=VARCHAR},
+      FIRST_CLASS = #{firstClass,jdbcType=DECIMAL},
+      SECOND_CLASS = #{secondClass,jdbcType=DECIMAL},
+      THIRD_CLASS = #{thirdClass,jdbcType=DECIMAL},
+      BOOK_LOCATION = #{bookLocation,jdbcType=VARCHAR},
+      EDIT_TIME = #{editTime,jdbcType=TIMESTAMP},
+    UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.user.mapper.UserPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.user.model.UserPermission">
+    <result column="RID" jdbcType="DECIMAL" property="rid" />
+    <result column="PID" jdbcType="DECIMAL" property="pid" />
+  </resultMap>
+  <insert id="insert" parameterType="com.supervision.user.model.UserPermission">
+    insert into JLXT.TB_JLXT_USER_PERMISSION (RID, PID)
+    values (#{rid,jdbcType=DECIMAL}, #{pid,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.user.model.UserPermission">
+    insert into JLXT.TB_JLXT_USER_PERMISSION
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        RID,
+      </if>
+      <if test="pid != null">
+        PID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="rid != null">
+        #{rid,jdbcType=DECIMAL},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="modifyRoleOfPermission" parameterType="java.lang.Integer">
+    update JLXT.TB_JLXT_USER_PERMISSION
+    <set>
+      PID = #{permissionId,jdbcType=DECIMAL}
+    </set>
+    where RID = #{roleId,jdbcType=DECIMAL}
+  </update>
+  <select id="getPermissionCountByRoleId" parameterType="com.supervision.user.model.UserPermission" resultType="java.lang.Integer">
+    select count(1)
+    from JLXT.TB_JLXT_USER_PERMISSION
+    where RID = #{roleId,jdbcType=DECIMAL}
+  </select>
+    <select id="getUserPermissionId" parameterType="com.supervision.user.model.UserPermission" resultMap="BaseResultMap">
+    select *
+    from JLXT.TB_JLXT_USER_PERMISSION
+    where RID = #{roleId,jdbcType=DECIMAL}
+  </select>
+  <select id="getRolePermissionInfo" parameterType="com.supervision.user.model.UserPermission" resultType="java.lang.Integer">
+    select count(1)
+    from JLXT.TB_JLXT_USER_PERMISSION
+    where RID = #{roleId,jdbcType=DECIMAL}
+    and PID = #{permissionId,jdbcType=DECIMAL}
+  </select>
+  <delete id="delRoleOfPermission" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_USER_PERMISSION
+    where RID = #{roleId,jdbcType=DECIMAL}
+  </delete>
+  <select id="getRoleOfPermissionList" parameterType="com.supervision.user.model.UserPermission" resultMap="BaseResultMap">
+    select *
+    from JLXT.TB_JLXT_USER_PERMISSION
+  </select>
+  <select id="getPermissionIdByRoleId" parameterType="com.supervision.user.model.UserPermission" resultMap="BaseResultMap">
+    select *
+    from JLXT.TB_JLXT_USER_PERMISSION
+    where RID = #{roleId,jdbcType=DECIMAL}
+  </select>
+
+</mapper>

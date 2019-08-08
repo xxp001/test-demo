@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.project.mapper.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.Project">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="PROJECT_NAME" jdbcType="VARCHAR" property="projectName" />
+    <result column="PROJECT_CODE" jdbcType="VARCHAR" property="projectCode" />
+    <result column="CLIENT" jdbcType="VARCHAR" property="client" />
+    <result column="CONTRACTOR" jdbcType="VARCHAR" property="contractor" />
+    <result column="DEPARTMENT" jdbcType="DECIMAL" property="department" />
+    <result column="PARTNER" jdbcType="VARCHAR" property="partner" />
+    <result column="PROJECT_DIRECTOR" jdbcType="DECIMAL" property="projectDirector" />
+    <result column="DELEGATE" jdbcType="DECIMAL" property="delegate" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CREATE_FROM" jdbcType="DECIMAL" property="createFrom" />
+    <result column="PROJECT_DESC" jdbcType="VARCHAR" property="projectDesc" />
+    <result column="PROJECT_STATE" jdbcType="DECIMAL" property="projectState" />
+    <result column="PROJECT_TYPE" jdbcType="DECIMAL" property="projectType" />
+    <result column="EXPECT_FINISH_TIME" jdbcType="TIMESTAMP" property="expectFinishTime" />
+    <result column="FINISH_TIME" jdbcType="TIMESTAMP" property="finishTime" />
+    <result column="START_TIME" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="BUILD_NAME" jdbcType="VARCHAR" property="buildName" />
+    <result column="CLIENT_CONTACT" jdbcType="VARCHAR" property="clientContact" />
+    <result column="PERSON_CHARGE" jdbcType="VARCHAR" property="personCharge" />
+    <result column="AGREEMENT_TIME" jdbcType="TIMESTAMP" property="agreementTime" />
+    <result column="BUILD_DURATION" jdbcType="DECIMAL" property="buildDuration" />
+    <result column="SERVICE_DURATION" jdbcType="DECIMAL" property="serviceDuration" />
+    <result column="IS_RESIDENT" jdbcType="DECIMAL" property="isResident" />
+    <result column="PROJECT_BUDGET" property="projectBudget" jdbcType="DECIMAL" />
+    <result column="SUPERVISION_AMOUNT" property="supervisionAmount" jdbcType="DECIMAL" />
+    <result column="SUPERVISION_PAID" property="supervisionPaid" jdbcType="DECIMAL" />
+    <result column="NOT_RESIDENT_WEEK_DAYS" jdbcType="DECIMAL" property="notResidentWeekDays" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, PROJECT_NAME, PROJECT_CODE, CLIENT, CONTRACTOR, DEPARTMENT, PARTNER, PROJECT_DIRECTOR, 
+    DELEGATE, CREATE_TIME, CREATE_FROM, PROJECT_DESC, PROJECT_STATE, PROJECT_TYPE, EXPECT_FINISH_TIME, FINISH_TIME, START_TIME, BUILD_NAME,
+    CLIENT_CONTACT, PERSON_CHARGE, AGREEMENT_TIME, BUILD_DURATION, SERVICE_DURATION, IS_RESIDENT, PROJECT_BUDGET, SUPERVISION_AMOUNT, SUPERVISION_PAID, NOT_RESIDENT_WEEK_DAYS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询开始 -->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT order by CREATE_TIME desc
+  </select>
+
+  <select id="selectAllByStateAfter" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT order by CREATE_TIME desc where PROJECT_STATE &gt;= #{projectState,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectAllByQuery" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT where PROJECT_NAME like CONCAT(CONCAT('%',#{query}),'%') or CLIENT like CONCAT(CONCAT('%',#{query}),'%') order by CREATE_TIME desc
+  </select>
+
+  <select id="selectAllByDate" resultMap="BaseResultMap" parameterType="com.supervision.project.model.Project" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT
+    where CREATE_TIME &gt;= #{startTime,jdbcType=TIMESTAMP} and CREATE_TIME &lt;= #{finishTime,jdbcType=TIMESTAMP} order by CREATE_TIME asc
+  </select>
+
+  <select id="selectAllByDateAndStateAfter" resultMap="BaseResultMap" parameterType="com.supervision.project.model.Project" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT
+    where CREATE_TIME &gt;= #{startTime,jdbcType=TIMESTAMP} and CREATE_TIME &lt;= #{finishTime,jdbcType=TIMESTAMP} and PROJECT_STATE &gt;= #{projectState,jdbcType=DECIMAL} order by CREATE_TIME asc
+  </select>
+
+  <select id="selectAllByUserByDate" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT
+    where CREATE_TIME &gt;= #{start,jdbcType=TIMESTAMP} and CREATE_TIME &lt;= #{end,jdbcType=TIMESTAMP} and
+    ID in (select PROJECT_ID from JLXT.TB_JLXT_PROJECT_TEAM where USER_ID = #{userId, jdbcType=DECIMAL}) order by CREATE_TIME desc
+  </select>
+
+  <select id="selectAllByUser" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_PROJECT
+    where
+    ID in (select PROJECT_ID from JLXT.TB_JLXT_PROJECT_TEAM where USER_ID = #{userId, jdbcType=DECIMAL}) order by CREATE_TIME desc
+  </select>
+  <!-- 自定义查询结束 -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from JLXT.TB_JLXT_PROJECT
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.Project">
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT JLXT.PROJECT_SEQ.CURRVAL AS ID FROM DUAL
+    </selectKey>
+    insert into JLXT.TB_JLXT_PROJECT (ID, PROJECT_NAME, PROJECT_CODE, 
+      CLIENT, CONTRACTOR, DEPARTMENT, 
+      PARTNER, PROJECT_DIRECTOR, DELEGATE, 
+      CREATE_TIME, CREATE_FROM, PROJECT_DESC, 
+      PROJECT_STATE, PROJECT_TYPE, EXPECT_FINISH_TIME, FINISH_TIME, START_TIME, BUILD_NAME,
+      CLIENT_CONTACT, PERSON_CHARGE, AGREEMENT_TIME, BUILD_DURATION, SERVICE_DURATION,
+      IS_RESIDENT, PROJECT_BUDGET, SUPERVISION_AMOUNT, SUPERVISION_PAID)
+    values (#{id,jdbcType=DECIMAL}, #{projectName,jdbcType=VARCHAR}, #{projectCode,jdbcType=VARCHAR}, 
+      #{client,jdbcType=VARCHAR}, #{contractor,jdbcType=VARCHAR}, #{department,jdbcType=DECIMAL}, 
+      #{partner,jdbcType=VARCHAR}, #{projectDirector,jdbcType=DECIMAL}, #{delegate,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createFrom,jdbcType=DECIMAL}, #{projectDesc,jdbcType=VARCHAR}, 
+      #{projectState,jdbcType=DECIMAL}, #{projectType,jdbcType=DECIMAL}, #{expectFinishTime,jdbcType=TIMESTAMP},
+      #{finishTime,jdbcType=TIMESTAMP}, #{startTime,jdbcType=TIMESTAMP}, #{buildName,jdbcType=VARCHAR},
+      #{clientContact,jdbcType=VARCHAR}, #{personCharge,jdbcType=VARCHAR}, #{agreementTime,jdbcType=TIMESTAMP},
+      #{buildDuration,jdbcType=DECIMAL}, #{serviceDuration,jdbcType=DECIMAL}, #{isResident,jdbcType=DECIMAL},
+      #{projectBudget,jdbcType=DECIMAL}, #{supervisionAmount,jdbcType=DECIMAL}, #{supervisionPaid,jdbcType=DECIMAL},
+      #{notResidentWeekDays,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.Project">
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT JLXT.PROJECT_SEQ.CURRVAL AS ID FROM DUAL
+    </selectKey>
+    insert into JLXT.TB_JLXT_PROJECT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="projectName != null">
+        PROJECT_NAME,
+      </if>
+      <if test="projectCode != null">
+        PROJECT_CODE,
+      </if>
+      <if test="client != null">
+        CLIENT,
+      </if>
+      <if test="contractor != null">
+        CONTRACTOR,
+      </if>
+      <if test="department != null">
+        DEPARTMENT,
+      </if>
+      <if test="partner != null">
+        PARTNER,
+      </if>
+      <if test="projectDirector != null">
+        PROJECT_DIRECTOR,
+      </if>
+      <if test="delegate != null">
+        DELEGATE,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="createFrom != null">
+        CREATE_FROM,
+      </if>
+      <if test="projectDesc != null">
+        PROJECT_DESC,
+      </if>
+      <if test="projectState != null">
+        PROJECT_STATE,
+      </if>
+      <if test="projectType != null">
+        PROJECT_TYPE,
+      </if>
+      <if test="expectFinishTime != null">
+        EXPECT_FINISH_TIME,
+      </if>
+      <if test="finishTime != null">
+        FINISH_TIME,
+      </if>
+      <if test="startTime != null">
+        START_TIME,
+      </if>
+      <if test="buildName != null">
+        BUILD_NAME,
+      </if>
+      <if test="clientContact != null">
+        CLIENT_CONTACT,
+      </if>
+      <if test="personCharge != null">
+        PERSON_CHARGE,
+      </if>
+      <if test="agreementTime != null">
+        AGREEMENT_TIME,
+      </if>
+      <if test="buildDuration != null">
+        BUILD_DURATION,
+      </if>
+      <if test="serviceDuration != null">
+        SERVICE_DURATION,
+      </if>
+      <if test="isResident != null">
+        IS_RESIDENT,
+      </if>
+      <if test="projectBudget != null">
+        PROJECT_BUDGET,
+      </if>
+      <if test="supervisionAmount != null">
+        SUPERVISION_AMOUNT,
+      </if>
+      <if test="supervisionPaid != null">
+        SUPERVISION_PAID,
+      </if>
+      <if test="notResidentWeekDays != null">
+        NOT_RESIDENT_WEEK_DAYS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectName != null">
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectCode != null">
+        #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="client != null">
+        #{client,jdbcType=VARCHAR},
+      </if>
+      <if test="contractor != null">
+        #{contractor,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=DECIMAL},
+      </if>
+      <if test="partner != null">
+        #{partner,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDirector != null">
+        #{projectDirector,jdbcType=DECIMAL},
+      </if>
+      <if test="delegate != null">
+        #{delegate,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createFrom != null">
+        #{createFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="projectDesc != null">
+        #{projectDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="projectState != null">
+        #{projectState,jdbcType=DECIMAL},
+      </if>
+      <if test="projectType != null">
+        #{projectType,jdbcType=DECIMAL},
+      </if>
+      <if test="expectFinishTime != null">
+        #{expectFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishTime != null">
+        #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buildName != null">
+        #{buildName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientContact != null">
+        #{clientContact,jdbcType=VARCHAR},
+      </if>
+      <if test="personCharge != null">
+        #{personCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="agreementTime != null">
+        #{agreementTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buildDuration != null">
+        #{buildDuration,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceDuration != null">
+        #{serviceDuration,jdbcType=DECIMAL},
+      </if>
+      <if test="isResident != null">
+        #{isResident,jdbcType=DECIMAL},
+      </if>
+      <if test="projectBudget != null">
+        #{projectBudget,jdbcType=DECIMAL},
+      </if>
+      <if test="supervisionAmount != null">
+        #{supervisionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="supervisionPaid != null">
+        #{supervisionPaid,jdbcType=DECIMAL},
+      </if>
+      <if test="notResidentWeekDays != null">
+        #{notResidentWeekDays,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.Project">
+    update JLXT.TB_JLXT_PROJECT
+    <set>
+      <if test="projectName != null">
+        PROJECT_NAME = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="projectCode != null">
+        PROJECT_CODE = #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="client != null">
+        CLIENT = #{client,jdbcType=VARCHAR},
+      </if>
+      <if test="contractor != null">
+        CONTRACTOR = #{contractor,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        DEPARTMENT = #{department,jdbcType=DECIMAL},
+      </if>
+      <if test="partner != null">
+        PARTNER = #{partner,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDirector != null">
+        PROJECT_DIRECTOR = #{projectDirector,jdbcType=DECIMAL},
+      </if>
+      <if test="delegate != null">
+        DELEGATE = #{delegate,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createFrom != null">
+        CREATE_FROM = #{createFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="projectDesc != null">
+        PROJECT_DESC = #{projectDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="projectState != null">
+        PROJECT_STATE = #{projectState,jdbcType=DECIMAL},
+      </if>
+      <if test="projectType != null">
+        PROJECT_TYPE = #{projectType,jdbcType=DECIMAL},
+      </if>
+      <if test="expectFinishTime != null">
+        EXPECT_FINISH_TIME = #{expectFinishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="finishTime != null">
+        FINISH_TIME = #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="startTime != null">
+        START_TIME = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buildName != null">
+        BUILD_NAME = #{buildName,jdbcType=VARCHAR},
+      </if>
+      <if test="clientContact != null">
+        CLIENT_CONTACT = #{clientContact,jdbcType=VARCHAR},
+      </if>
+      <if test="personCharge != null">
+        PERSON_CHARGE = #{personCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="agreementTime != null">
+        AGREEMENT_TIME = #{agreementTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buildDuration != null">
+        BUILD_DURATION = #{buildDuration,jdbcType=DECIMAL},
+      </if>
+      <if test="serviceDuration != null">
+        SERVICE_DURATION = #{serviceDuration,jdbcType=DECIMAL},
+      </if>
+      <if test="isResident != null">
+        IS_RESIDENT = #{isResident,jdbcType=DECIMAL},
+      </if>
+      <if test="projectBudget != null">
+        PROJECT_BUDGET = #{projectBudget,jdbcType=DECIMAL},
+      </if>
+      <if test="supervisionAmount != null">
+        SUPERVISION_AMOUNT = #{supervisionAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="supervisionPaid != null">
+        SUPERVISION_PAID = #{supervisionPaid,jdbcType=DECIMAL},
+      </if>
+      <if test="notResidentWeekDays != null">
+        NOT_RESIDENT_WEEK_DAYS = #{notResidentWeekDays,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.Project">
+    update JLXT.TB_JLXT_PROJECT
+    set PROJECT_NAME = #{projectName,jdbcType=VARCHAR},
+      PROJECT_CODE = #{projectCode,jdbcType=VARCHAR},
+      CLIENT = #{client,jdbcType=VARCHAR},
+      CONTRACTOR = #{contractor,jdbcType=VARCHAR},
+      DEPARTMENT = #{department,jdbcType=DECIMAL},
+      PARTNER = #{partner,jdbcType=VARCHAR},
+      PROJECT_DIRECTOR = #{projectDirector,jdbcType=DECIMAL},
+      DELEGATE = #{delegate,jdbcType=DECIMAL},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      CREATE_FROM = #{createFrom,jdbcType=DECIMAL},
+      PROJECT_DESC = #{projectDesc,jdbcType=VARCHAR},
+      PROJECT_STATE = #{projectState,jdbcType=DECIMAL},
+      PROJECT_TYPE = #{projectType,jdbcType=DECIMAL},
+      EXPECT_FINISH_TIME = #{expectFinishTime,jdbcType=TIMESTAMP},
+      FINISH_TIME = #{finishTime,jdbcType=TIMESTAMP},
+      START_TIME = #{startTime,jdbcType=TIMESTAMP},
+      BUILD_NAME = #{buildName,jdbcType=VARCHAR},
+      CLIENT_CONTACT = #{clientContact,jdbcType=VARCHAR},
+      PERSON_CHARGE = #{personCharge,jdbcType=VARCHAR},
+      AGREEMENT_TIME = #{agreementTime,jdbcType=TIMESTAMP},
+      BUILD_DURATION = #{buildDuration,jdbcType=DECIMAL},
+      SERVICE_DURATION = #{serviceDuration,jdbcType=DECIMAL},
+      IS_RESIDENT = #{isResident,jdbcType=DECIMAL},
+      PROJECT_BUDGET = #{projectBudget,jdbcType=DECIMAL},
+      SUPERVISION_AMOUNT = #{supervisionAmount,jdbcType=DECIMAL},
+      SUPERVISION_PAID = #{supervisionPaid,jdbcType=DECIMAL},
+    NOT_RESIDENT_WEEK_DAYS = #{notResidentWeekDays,jdbcType=DECIMAL}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

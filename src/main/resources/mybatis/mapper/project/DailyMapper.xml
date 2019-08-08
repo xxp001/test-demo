@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.DailyMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.Daily" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="DECIMAL" />
+    <result column="UPLOAD_FROM" property="uploadFrom" jdbcType="DECIMAL" />
+    <result column="UPLOAD_TIME" property="uploadTime" jdbcType="TIMESTAMP" />
+    <result column="SUMMARY" property="summary" jdbcType="VARCHAR" />
+    <result column="DAILY_DETAIL" property="dailyDetail" jdbcType="VARCHAR" />
+    <result column="DAILY_DETAIL_AM" property="dailyDetailAM" jdbcType="VARCHAR" />
+    <result column="DAILY_DETAIL_PM" property="dailyDetailPM" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PROJECT_ID, UPLOAD_FROM, UPLOAD_TIME, SUMMARY, DAILY_DETAIL, DAILY_DETAIL_AM, DAILY_DETAIL_PM
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DAILY
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询开始 -->
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DAILY
+  </select>
+
+  <select id="selectAllByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DAILY
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByUploader" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  select
+  <include refid="Base_Column_List" />
+  from JLXT.TB_JLXT_DAILY
+  where UPLOAD_FROM = #{userId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByUploaderByDate" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DAILY
+    where UPLOAD_TIME &gt;= #{start,jdbcType=TIMESTAMP} and UPLOAD_TIME &lt;= #{end,jdbcType=TIMESTAMP} and UPLOAD_FROM = #{userId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectAllByDate" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DAILY
+    where UPLOAD_TIME &gt;= #{start,jdbcType=TIMESTAMP} and UPLOAD_TIME &lt;= #{end,jdbcType=TIMESTAMP}
+  </select>
+
+  <select id="selectByDateByProject" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_DAILY
+    where UPLOAD_TIME &gt;= #{start,jdbcType=TIMESTAMP} and UPLOAD_TIME &lt;= #{end,jdbcType=TIMESTAMP} and PROJECT_ID = #{projectId,jdbcType=DECIMAL}
+  </select>
+  <!-- 自定义查询结束 -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_DAILY
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.Daily" >
+    insert into JLXT.TB_JLXT_DAILY (ID, PROJECT_ID, UPLOAD_FROM, 
+      UPLOAD_TIME, SUMMARY, DAILY_DETAIL, DAILY_DETAIL_AM, DAILY_DETAIL_PM
+      )
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=DECIMAL}, #{uploadFrom,jdbcType=DECIMAL}, 
+      #{uploadTime,jdbcType=TIMESTAMP}, #{summary,jdbcType=VARCHAR}, #{dailyDetail,jdbcType=VARCHAR},
+    #{dailyDetailAM,jdbcType=VARCHAR}, #{dailyDetailPM,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.Daily" >
+    insert into JLXT.TB_JLXT_DAILY
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="projectId != null" >
+        PROJECT_ID,
+      </if>
+      <if test="uploadFrom != null" >
+        UPLOAD_FROM,
+      </if>
+      <if test="uploadTime != null" >
+        UPLOAD_TIME,
+      </if>
+      <if test="summary != null" >
+        SUMMARY,
+      </if>
+      <if test="dailyDetail != null" >
+        DAILY_DETAIL,
+      </if>
+      <if test="dailyDetailAM != null" >
+        DAILY_DETAIL_AM,
+      </if>
+      <if test="dailyDetailPM != null" >
+        DAILY_DETAIL_PM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadFrom != null" >
+        #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadTime != null" >
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="summary != null" >
+        #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyDetail != null" >
+        #{dailyDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyDetailAM != null" >
+        #{dailyDetailAM,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyDetailPM != null" >
+        #{dailyDetailPM,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.Daily" >
+    update JLXT.TB_JLXT_DAILY
+    <set >
+      <if test="projectId != null" >
+        PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadFrom != null" >
+        UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadTime != null" >
+        UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="summary != null" >
+        SUMMARY = #{summary,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyDetail != null" >
+        DAILY_DETAIL = #{dailyDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyDetailAM != null" >
+        DAILY_DETAIL_AM = #{dailyDetailAM,jdbcType=VARCHAR},
+      </if>
+      <if test="dailyDetailPM != null" >
+        DAILY_DETAIL_PM = #{dailyDetailPM,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.Daily" >
+    update JLXT.TB_JLXT_DAILY
+    set PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      SUMMARY = #{summary,jdbcType=VARCHAR},
+      DAILY_DETAIL = #{dailyDetail,jdbcType=VARCHAR},
+    DAILY_DETAIL_AM = #{dailyDetailAM,jdbcType=VARCHAR},
+    DAILY_DETAIL_PM = #{dailyDetailPM,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.supervision.user.mapper.UserDetailMapper">
+  <resultMap id="BaseResultMap" type="com.supervision.user.model.UserDetail">
+    <result column="WORK_CODE" jdbcType="VARCHAR" property="workCode" />
+    <result column="AGE" jdbcType="DECIMAL" property="age" />
+    <result column="GENDER" jdbcType="VARCHAR" property="gender" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="ICE_NAME" jdbcType="VARCHAR" property="iceName" />
+    <result column="ICE_PHONE" jdbcType="VARCHAR" property="icePhone" />
+  </resultMap>
+  <insert id="insert" parameterType="com.supervision.user.model.UserDetail">
+    insert into JLXT.TB_JLXT_USER_DETAIL (WORK_CODE, AGE, GENDER, 
+      EMAIL, ICE_NAME, ICE_PHONE
+      )
+    values (#{workCode,jdbcType=VARCHAR}, #{age,jdbcType=DECIMAL}, #{gender,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{iceName,jdbcType=VARCHAR}, #{icePhone,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.user.model.UserDetail">
+    insert into JLXT.TB_JLXT_USER_DETAIL
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="workCode != null">
+        WORK_CODE,
+      </if>
+      <if test="age != null">
+        AGE,
+      </if>
+      <if test="gender != null">
+        GENDER,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="iceName != null">
+        ICE_NAME,
+      </if>
+      <if test="icePhone != null">
+        ICE_PHONE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="workCode != null">
+        #{workCode,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=DECIMAL},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="iceName != null">
+        #{iceName,jdbcType=VARCHAR},
+      </if>
+      <if test="icePhone != null">
+        #{icePhone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateUserDetailInfo" parameterType="com.supervision.user.model.UserDetail">
+    update JLXT.TB_JLXT_USER_DETAIL
+    set AGE =  #{age,jdbcType=DECIMAL},
+    EMAIL = #{email,jdbcType=VARCHAR},
+    ICE_NAME =  #{iceName,jdbcType=VARCHAR},
+    ICE_PHONE = #{icePhone,jdbcType=VARCHAR}
+    where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </update>
+  <select id="selectUserDetailInfo" resultMap="BaseResultMap">
+    select *
+    from JLXT.TB_JLXT_USER_DETAIL
+     where WORK_CODE = #{workCode,jdbcType=VARCHAR}
+  </select>
+</mapper>

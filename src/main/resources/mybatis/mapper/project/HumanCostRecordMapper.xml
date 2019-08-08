@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supervision.project.mapper.HumanCostRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.supervision.project.model.HumanCostRecord" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="PROJECT_ID" property="projectId" jdbcType="DECIMAL" />
+    <result column="MOMENT_ID" property="momentId" jdbcType="DECIMAL" />
+    <result column="UPLOAD_FROM" property="uploadFrom" jdbcType="DECIMAL" />
+    <result column="UPLOAD_TIME" property="uploadTime" jdbcType="TIMESTAMP" />
+    <result column="WORK_TIME" property="workTime" jdbcType="DECIMAL" />
+    <result column="APPLY_STATE" property="applyState" jdbcType="DECIMAL" />
+    <result column="WORK_CODE" property="workCode" jdbcType="VARCHAR" />
+    <result column="UPLOADER_NAME" property="uploaderName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PROJECT_ID, MOMENT_ID, UPLOAD_FROM, UPLOAD_TIME, WORK_TIME, APPLY_STATE, WORK_CODE, UPLOADER_NAME
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_HUMANCOST_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+
+  <!-- 自定义查询开始 -->
+  <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_HUMANCOST_RECORD
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByMoment" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_HUMANCOST_RECORD
+    where MOMENT_ID = #{momentId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectHumanCostRecordByUploaderAndProjectAndUploadTime" resultMap="BaseResultMap" parameterType="com.supervision.project.model.HumanCostRecord" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_HUMANCOST_RECORD
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL} and UPLOAD_TIME = #{uploadTime,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectByProjectAndUser" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_HUMANCOST_RECORD
+    where PROJECT_ID = #{projectId,jdbcType=DECIMAL} and UPLOAD_FROM = #{userId,jdbcType=DECIMAL} order by UPLOAD_TIME desc
+  </select>
+
+  <select id="selectByMomentAndUser" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from JLXT.TB_JLXT_HUMANCOST_RECORD
+    where MOMENT_ID = #{momentId,jdbcType=DECIMAL} and UPLOAD_FROM = #{userId,jdbcType=DECIMAL} order by UPLOAD_TIME desc
+  </select>
+
+  <!-- 查询用户最新上传的一条记录每个项目 -->
+  <select id="selectTheLastRecordByUpload" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from (SELECT * FROM JLXT.TB_JLXT_HUMANCOST_RECORD where UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL} and PROJECT_ID = #{projectId,jdbcType=DECIMAL} ORDER BY UPLOAD_TIME DESC)
+    where ROWNUM = 1
+  </select>
+  <!-- 自定义查询结束 -->
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from JLXT.TB_JLXT_HUMANCOST_RECORD
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.supervision.project.model.HumanCostRecord" >
+    insert into JLXT.TB_JLXT_HUMANCOST_RECORD (ID, PROJECT_ID, MOMENT_ID, 
+      UPLOAD_FROM, UPLOAD_TIME, WORK_TIME, 
+      APPLY_STATE)
+    values (#{id,jdbcType=DECIMAL}, #{projectId,jdbcType=DECIMAL}, #{momentId,jdbcType=DECIMAL}, 
+      #{uploadFrom,jdbcType=DECIMAL}, #{uploadTime,jdbcType=TIMESTAMP}, #{workTime,jdbcType=DECIMAL}, 
+      #{applyState,jdbcType=DECIMAL}, #{workCode,jdbcType=VARCHAR}, #{uploaderName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.supervision.project.model.HumanCostRecord" >
+    insert into JLXT.TB_JLXT_HUMANCOST_RECORD
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="projectId != null" >
+        PROJECT_ID,
+      </if>
+      <if test="momentId != null" >
+        MOMENT_ID,
+      </if>
+      <if test="uploadFrom != null" >
+        UPLOAD_FROM,
+      </if>
+      <if test="uploadTime != null" >
+        UPLOAD_TIME,
+      </if>
+      <if test="workTime != null" >
+        WORK_TIME,
+      </if>
+      <if test="applyState != null" >
+        APPLY_STATE,
+      </if>
+      <if test="workCode != null" >
+        WORK_CODE,
+      </if>
+      <if test="uploaderName != null" >
+        UPLOADER_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentId != null" >
+        #{momentId,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadFrom != null" >
+        #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadTime != null" >
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workTime != null" >
+        #{workTime,jdbcType=DECIMAL},
+      </if>
+      <if test="applyState != null" >
+        #{applyState,jdbcType=DECIMAL},
+      </if>
+      <if test="workCode != null" >
+        #{workCode,jdbcType=VARCHAR},
+      </if>
+      <if test="uploaderName != null" >
+        #{uploaderName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.supervision.project.model.HumanCostRecord" >
+    update JLXT.TB_JLXT_HUMANCOST_RECORD
+    <set >
+      <if test="projectId != null" >
+        PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      </if>
+      <if test="momentId != null" >
+        MOMENT_ID = #{momentId,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadFrom != null" >
+        UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      </if>
+      <if test="uploadTime != null" >
+        UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="workTime != null" >
+        WORK_TIME = #{workTime,jdbcType=DECIMAL},
+      </if>
+      <if test="applyState != null" >
+        APPLY_STATE = #{applyState,jdbcType=DECIMAL},
+      </if>
+      <if test="workCode != null" >
+        WORK_CODE = #{workCode,jdbcType=VARCHAR},
+      </if>
+      <if test="uploaderName != null" >
+        UPLOADER_NAME = #{uploaderName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.supervision.project.model.HumanCostRecord" >
+    update JLXT.TB_JLXT_HUMANCOST_RECORD
+    set PROJECT_ID = #{projectId,jdbcType=DECIMAL},
+      MOMENT_ID = #{momentId,jdbcType=DECIMAL},
+      UPLOAD_FROM = #{uploadFrom,jdbcType=DECIMAL},
+      UPLOAD_TIME = #{uploadTime,jdbcType=TIMESTAMP},
+      WORK_TIME = #{workTime,jdbcType=DECIMAL},
+      APPLY_STATE = #{applyState,jdbcType=DECIMAL},
+      WORK_CODE = #{workCode,jdbcType=VARCHAR},
+      UPLOADER_NAME = #{uploaderName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>
